@@ -13,11 +13,11 @@ install`, no Docker pull** — so it starts in well under a second on every runn
 including Windows, where Python-based reporters spend roughly a minute just
 bootstrapping their interpreter before doing any work.
 
-> Status: **pre-1.0.** All parsers, stats, digest, rendering, and GitHub
+> Status: **stable.** All parsers, stats, digest, rendering, and GitHub
 > publishing (check run, PR comment, annotations, deltas, fork handling) are
-> implemented. A floating `v1` tag will be published once test coverage reaches
-> 100% with green CI. Until then, pin a commit SHA or an exact tag. See
-> [Roadmap](#roadmap).
+> implemented, held at 100% coverage on the pure modules, and verified
+> end-to-end on a live pull request. Pin `@v1` — see
+> [Versioning & releases](#versioning--releases).
 
 ## Why
 
@@ -34,7 +34,7 @@ takes about a second. `cinct` keeps it that way.
 ## Usage
 
 ```yaml
-- uses: nexdrew/cinct@v1   # @v1 is reserved until 1.0.0 — until then pin a commit SHA
+- uses: nexdrew/cinct@v1   # or pin @v1.2.3 for an exact release
   if: always()             # report results even when tests failed
   with:
     files: |
@@ -130,7 +130,7 @@ Every input is optional. Defaults are shown.
 | ✅ passed | 1 |
 | 💤 skipped | 1 |
 | ❌ failed | 3 |
-| 🔥 errors | 0 |
+| ⚠️ errors | 0 |
 
 When a previous run is found, a delta column (`Δ`) is added automatically.
 `report_format: text` renders the same numbers on a single line.
@@ -283,7 +283,7 @@ test/                 # node:test specs + fixtures
 - [x] Dart `isFailure`-vs-`result` run/test mapping
 - [x] 100% coverage (pure modules) enforced in CI
 - [x] automated releases (release-please) + floating major tag
-- [ ] live-API verification on a real PR, then tag `v1.0.0`
+- [x] live-API verification on a real pull request
 
 ## Versioning & releases
 
@@ -305,11 +305,6 @@ Releases are automated with
    bump and `CHANGELOG.md` entries derived from commit messages.
 2. Merging that Release PR creates the `vX.Y.Z` tag and GitHub release, and a CI
    step force-updates the floating major tag (e.g. `v1`) to point at it.
-
-To cut the first stable release, include `Release-As: 1.0.0` in a commit on
-`main` (e.g. in the Release PR), and release-please will propose `v1.0.0`.
-
-> Pre-1.0: pin a commit SHA or exact tag until `v1.0.0` ships.
 
 ## License
 

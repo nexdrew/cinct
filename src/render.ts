@@ -8,7 +8,7 @@ const LABELS = {
   passed: '✅ passed',
   skipped: '💤 skipped',
   failed: '❌ failed',
-  errors: '🔥 errors'
+  errors: '⚠️ errors'
 } as const
 
 function delta (curr: number, prev: number | undefined): string {
