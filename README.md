@@ -59,7 +59,9 @@ takes about a second. `cinct` keeps it that way.
 
 **Bun:** run `bun test --reporter=junit` to emit JUnit XML, **or**
 `bun test --reporter=tap` to emit TAP — both are supported, pick whichever you
-prefer. **Node:** `node:test` (and `node --test`) can emit TAP, which `cinct`
+prefer.
+
+**Node:** `node:test` (and `node --test`) can emit TAP, which `cinct`
 parses directly.
 
 ### Inputs
