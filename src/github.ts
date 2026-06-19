@@ -3,10 +3,10 @@ import { GitHub, getOctokitOptions } from '@actions/github/lib/utils'
 import { retry } from '@octokit/plugin-retry'
 import { throttling } from '@octokit/plugin-throttling'
 
-const CinctOctokit = GitHub.plugin(retry, throttling)
+const CiHawkOctokit = GitHub.plugin(retry, throttling)
 
-/** The Octokit instance type used throughout cinct (with retry + throttling). */
-export type Octokit = InstanceType<typeof CinctOctokit>
+/** The Octokit instance type used throughout ci-hawk (with retry + throttling). */
+export type Octokit = InstanceType<typeof CiHawkOctokit>
 
 interface ThrottleOptions {
   method: string
@@ -19,7 +19,7 @@ interface ThrottleOptions {
  * gets from PyGithub. `retries` bounds both retry mechanisms.
  */
 export function buildOctokit (token: string, retries: number): Octokit {
-  return new CinctOctokit(
+  return new CiHawkOctokit(
     getOctokitOptions(token, {
       retry: { retries },
       throttle: {

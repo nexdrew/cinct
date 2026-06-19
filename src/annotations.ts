@@ -1,6 +1,6 @@
 import type { ParsedFile } from './types.js'
 
-/** A GitHub check-run annotation (subset of fields cinct emits). */
+/** A GitHub check-run annotation (subset of fields ci-hawk emits). */
 export interface Annotation {
   path: string
   start_line: number

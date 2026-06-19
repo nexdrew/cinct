@@ -32,13 +32,13 @@ import type {
  *   anything else (incl. missing)    -> 'error'
  *
  * FAILURE vs ERROR: EnricoMi derives run-level fail/error from the error
- * event's `isFailure` flag. cinct's single per-case status honors `isFailure`
+ * event's `isFailure` flag. ci-hawk's single per-case status honors `isFailure`
  * when present (failure when true, error when false) and falls back to
  * testDone.result otherwise — so it matches EnricoMi's counts for all valid
  * Dart output, where isFailure and result are consistent.
  *
  * DURATION: dart.py never assigns a leaf-suite end time, so its leaf-suite time
- * (via junitparser) is the sum of case times — which is exactly what cinct's
+ * (via junitparser) is the sum of case times — which is exactly what ci-hawk's
  * aggregate() computes when no suite time is set. So we do NOT set suite.time
  * here; the case-time sum already matches the Python action.
  *

@@ -1,7 +1,7 @@
 import type { Octokit } from './github.js'
 
-/** Hidden marker used to find a comment cinct previously posted on a PR. */
-export const COMMENT_MARKER = '<!-- cinct:test-results -->'
+/** Hidden marker used to find a comment ci-hawk previously posted on a PR. */
+export const COMMENT_MARKER = '<!-- ci-hawk:test-results -->'
 
 async function findCommentId (
   octokit: Octokit,
@@ -28,7 +28,7 @@ async function findCommentId (
 }
 
 /**
- * Create a cinct comment on the issue/PR, or edit the existing one (identified
+ * Create a ci-hawk comment on the issue/PR, or edit the existing one (identified
  * by COMMENT_MARKER) so re-runs update in place rather than piling up.
  */
 export async function upsertComment (

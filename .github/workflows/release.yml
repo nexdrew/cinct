@@ -15,7 +15,7 @@ jobs:
     steps:
       # Opens/updates a Release PR on every push to main; merging it bumps the
       # version, updates CHANGELOG.md, and creates the tag + GitHub release.
-      # (No npm/Docker/binary publishing — cinct is consumed as `uses: nexdrew/cinct@vX`.)
+      # (No npm/Docker/binary publishing — ci-hawk is consumed as `uses: nexdrew/ci-hawk@vX`.)
       - uses: googleapis/release-please-action@v5
         id: release
         with:
@@ -23,7 +23,7 @@ jobs:
           target-branch: main
 
       # On an actual release, move the floating major and minor tags to it so
-      # consumers can pin `nexdrew/cinct@v1` or `@v1.2` as well as `@v1.2.3`.
+      # consumers can pin `nexdrew/ci-hawk@v1` or `@v1.2` as well as `@v1.2.3`.
       - uses: actions/checkout@v7
         if: ${{ steps.release.outputs.release_created }}
         with:

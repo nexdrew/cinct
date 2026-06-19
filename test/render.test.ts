@@ -71,11 +71,11 @@ void test('commit line, details link, and marker are appended when set', () => {
     format: 'text',
     commit: 'deadbeefcafe',
     detailsUrl: 'https://example.com/run/1',
-    marker: '<!-- cinct -->'
+    marker: '<!-- ci-hawk -->'
   })
   assert.ok(body.includes('Results for commit deadbeef.'))
   assert.ok(body.includes('[View details](https://example.com/run/1)'))
-  assert.ok(body.trimEnd().endsWith('<!-- cinct -->'))
+  assert.ok(body.trimEnd().endsWith('<!-- ci-hawk -->'))
 })
 
 void test('duration formats minutes for >= 60s', () => {

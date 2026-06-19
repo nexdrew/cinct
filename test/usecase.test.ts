@@ -5,7 +5,7 @@ import { parseContent } from '../src/parse/registry.js'
 import { aggregate } from '../src/results.js'
 import { getConclusion, actionFailRequired } from '../src/conclusion.js'
 
-// Integration test: prove cinct can replace this exact EnricoMi usage as an
+// Integration test: prove ci-hawk can replace this exact EnricoMi usage as an
 // ADVISORY reporter (the step reports failing tests but never fails the job):
 //
 //   uses: EnricoMi/publish-unit-test-result-action/windows@v2

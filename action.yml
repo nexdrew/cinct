@@ -1,9 +1,9 @@
-name: "cinct"
+name: "ci-hawk"
 description: "Fast, native, cross-platform test result reporter for CI (JUnit, xUnit, NUnit, TRX, TAP, Dart, Mocha)"
 author: "nexdrew"
 branding:
-  icon: "check-circle"
-  color: "green"
+  icon: "feather"
+  color: "gray-dark"
 
 inputs:
   github_token:

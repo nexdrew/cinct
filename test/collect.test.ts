@@ -8,7 +8,7 @@ import { expandFiles, parseFiles } from '../src/collect.js'
 async function withTmp (
   fn: (dir: string) => Promise<void>
 ): Promise<void> {
-  const dir = await mkdtemp(join(tmpdir(), 'cinct-collect-'))
+  const dir = await mkdtemp(join(tmpdir(), 'ci-hawk-collect-'))
   try {
     await fn(dir)
   } finally {

@@ -1,8 +1,8 @@
-# `nexdrew/cinct`
+# `nexdrew/ci-hawk`
 
 **Fast, native, cross-platform test result reporter for CI — especially on Windows.**
 
-`cinct` (succinct + CI) is a GitHub Action that collects your test result files
+`ci-hawk` is a speedy GitHub Action that keeps a sharp eye on your CI: it collects your test result files
 and publishes a **test report** — a check run, a PR comment, and a job summary —
 with cross-commit deltas. It speaks the common CI formats (**JUnit**, **xUnit**,
 **NUnit**, **TRX**, **TAP**, Dart JSON, Mocha JSON) and is wire-compatible with
@@ -21,7 +21,7 @@ bootstrapping their interpreter before doing any work.
 
 ## Why
 
-| | Python-based reporters | `cinct` |
+| | Python-based reporters | `ci-hawk` |
 |---|---|---|
 | Runtime setup on Windows | venv + `pip install` (~minute) | none (Node preinstalled) |
 | Distribution | composite + Python, or Docker (Linux only) | single `node24` action |
@@ -29,13 +29,13 @@ bootstrapping their interpreter before doing any work.
 | Cross-platform | setup cost per-OS | uniform |
 
 If all you want is to **collect and publish test results**, the work itself
-takes about a second. `cinct` keeps it that way.
+takes about a second. `ci-hawk` keeps it that way.
 
 ## Usage
 
 ```yaml
-- uses: nexdrew/cinct@v1   # or pin @v1.2.3 for an exact release
-  if: always()             # report results even when tests failed
+- uses: nexdrew/ci-hawk@v1  # or pin @v1.2.3 for an exact release
+  if: always()              # report results even when tests failed
   with:
     files: |
       **/test-results/**/*.xml
@@ -45,7 +45,7 @@ takes about a second. `cinct` keeps it that way.
 
 ### Supported formats
 
-`cinct` detects each file's format from its content and parses it:
+`ci-hawk` detects each file's format from its content and parses it:
 
 | Format | Notes |
 |---|---|
@@ -61,7 +61,7 @@ takes about a second. `cinct` keeps it that way.
 `bun test --reporter=tap` to emit TAP — both are supported, pick whichever you
 prefer.
 
-**Node:** `node:test` (and `node --test`) can emit TAP, which `cinct`
+**Node:** `node:test` (and `node --test`) can emit TAP, which `ci-hawk`
 parses directly.
 
 ### Inputs
@@ -119,7 +119,7 @@ Every input is optional. Defaults are shown.
 - **Throttling + retry** — the GitHub client uses Octokit's throttling and retry
   plugins to ride out rate limits and transient errors (`github_retries`).
 - **Fork handling** — on a pull request from a fork, the `GITHUB_TOKEN` cannot
-  create check runs or comments, so `cinct` produces **only the job summary** and
+  create check runs or comments, so `ci-hawk` produces **only the job summary** and
   skips the API writes (no failed steps from missing permissions).
 
 ### Configurable report format
@@ -139,18 +139,18 @@ When a previous run is found, a delta column (`Δ`) is added automatically.
 
 ## Cross-commit deltas (digest)
 
-`cinct` embeds a compact **gzip + base64 digest** of the run stats in the report.
+`ci-hawk` embeds a compact **gzip + base64 digest** of the run stats in the report.
 The next run reads the prior digest to compute deltas. The digest is
-**wire-compatible** with `EnricoMi/publish-unit-test-result-action`: `cinct` can
+**wire-compatible** with `EnricoMi/publish-unit-test-result-action`: `ci-hawk` can
 read digests written by that action (and vice-versa). The JSON schema and
 encoding match; only the compressed gzip bytes differ, which is harmless because
 digests are always decoded, never string-compared.
 
 ## Acknowledgements / Inspired by
 
-`cinct` is inspired by and modeled on
+`ci-hawk` is inspired by and modeled on
 [**EnricoMi/publish-unit-test-result-action**](https://github.com/EnricoMi/publish-unit-test-result-action),
-an excellent and widely used reporter. `cinct` is an **independent,
+an excellent and widely used reporter. `ci-hawk` is an **independent,
 format-compatible reimplementation** of the parts of that action most CI
 pipelines actually use — written natively for Node so it starts fast everywhere,
 especially Windows. It is **not affiliated with or endorsed by** that project.
@@ -177,7 +177,7 @@ steps:
       fail_on: nothing
 ```
 
-**After** (`cinct`, same permissions and inputs):
+**After** (`ci-hawk`, same permissions and inputs):
 
 ```yaml
 permissions:
@@ -186,14 +186,14 @@ permissions:
   contents: read
 
 steps:
-  - uses: nexdrew/cinct@v1
+  - uses: nexdrew/ci-hawk@v1
     if: always()
     with:
       files: test-results.xml
       fail_on: nothing
 ```
 
-`cinct` is a single `node24` action, so there is no `/windows` (or `/composite`,
+`ci-hawk` is a single `node24` action, so there is no `/windows` (or `/composite`,
 `/docker`) variant — one `uses:` line works identically on Linux, macOS, and
 Windows.
 
