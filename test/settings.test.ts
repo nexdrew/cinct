@@ -1,14 +1,14 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { getSettings } from '../src/settings.js'
+import { getSettings, deriveMarker } from '../src/settings.js'
 
 // Inputs @actions/core reads as INPUT_<UPPER_SNAKE>. We clear all of them so a
 // test sees only what it sets, then restore the previous environment.
 const INPUT_NAMES = [
   'github_token', 'github_retries', 'files', 'check_name', 'comment_title',
-  'comment_mode', 'fail_on', 'action_fail', 'action_fail_on_inconclusive',
-  'compare_to_earlier_commit', 'report_format', 'time_unit', 'commit',
-  'check_run', 'job_summary', 'json_file'
+  'comment_marker', 'comment_mode', 'fail_on', 'action_fail',
+  'action_fail_on_inconclusive', 'compare_to_earlier_commit', 'report_format',
+  'time_unit', 'commit', 'check_run', 'job_summary', 'json_file'
 ]
 
 function envKey (name: string): string {
@@ -41,6 +41,7 @@ void test('defaults when no inputs are set', () => {
   assert.equal(s.format, 'text')
   assert.equal(s.checkName, 'Test Results')
   assert.equal(s.commentTitle, 'Test Results') // defaults to checkName
+  assert.equal(s.commentMarker, '<!-- ci-hawk:test-results -->') // derived from checkName
   assert.equal(s.commentMode, 'always')
   assert.equal(s.jobSummary, true)
   assert.equal(s.checkRun, true)
@@ -113,4 +114,23 @@ void test('comment_mode off, json_file, multiline files, commit override', () =>
   assert.deepEqual(s.filesGlobs, ['a.xml', 'b.xml', 'c.xml']) // trimmed, blanks dropped
   assert.equal(s.commit, 'override-sha') // input wins over GITHUB_SHA
   assert.equal(s.commentTitle, 'Custom')
+})
+
+void test('commentMarker: derived from check_name, slugified', () => {
+  const s = withInputs({ check_name: 'Unit Test Results' }, getSettings)
+  assert.equal(s.commentMarker, '<!-- ci-hawk:unit-test-results -->')
+})
+
+void test('commentMarker: explicit comment_marker overrides derivation', () => {
+  const s = withInputs(
+    { check_name: 'Integration Test Results', comment_marker: '<!-- custom-key -->' },
+    getSettings
+  )
+  assert.equal(s.commentMarker, '<!-- custom-key -->')
+})
+
+void test('deriveMarker: slugifies, collapses punctuation, falls back when empty', () => {
+  assert.equal(deriveMarker('Test Results'), '<!-- ci-hawk:test-results -->')
+  assert.equal(deriveMarker('  Foo / Bar (v2)  '), '<!-- ci-hawk:foo-bar-v2 -->')
+  assert.equal(deriveMarker('!!!'), '<!-- ci-hawk:test-results -->') // empty slug -> fallback
 })

@@ -24,6 +24,9 @@ inputs:
   comment_title:
     description: "Title for the PR comment. Defaults to check_name."
     required: false
+  comment_marker:
+    description: "Hidden HTML marker used to find/update this action's PR comment across runs. Defaults to a value derived from check_name, so distinct check_name values post distinct comments."
+    required: false
   comment_mode:
     description: '"always" or "off".'
     default: "always"
