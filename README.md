@@ -73,6 +73,7 @@ Every input is optional. Defaults are shown.
 | `files` | – | Newline-separated glob patterns of test result files |
 | `check_name` | `Test Results` | Name of the created check run |
 | `comment_title` | = `check_name` | Title for the PR comment |
+| `comment_marker` | derived from `check_name` | Hidden HTML marker used to find/update this action's PR comment across runs. Distinct `check_name` values get distinct comments; set this to override |
 | `comment_mode` | `always` | `always` or `off` |
 | `fail_on` | `test failures` | Check-run conclusion threshold: `test failures` (fail on failures or errors), `errors` (fail only on errors), or `nothing` (always neutral/success). Computed from run-level (non-deduplicated) counts, which may differ from the deduplicated `tests_*` shown in the summary. |
 | `action_fail` | `false` | When `true`, the action step itself fails when the conclusion is a failure (per `fail_on`) |

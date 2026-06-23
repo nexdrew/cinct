@@ -4,7 +4,7 @@ import { buildOctokit, type Octokit } from './github.js'
 import { decodeDigest, findDigestLine } from './digest.js'
 import { renderReport } from './render.js'
 import { buildAnnotations, ANNOTATION_BATCH } from './annotations.js'
-import { upsertComment, COMMENT_MARKER } from './comment.js'
+import { upsertComment } from './comment.js'
 import type { Conclusion } from './conclusion.js'
 import type { Settings } from './settings.js'
 import type { ParsedFile, RunResults } from './types.js'
@@ -246,10 +246,10 @@ async function publishComments (
       previous: baseStats,
       commit: sha,
       headingLevel: 2,
-      marker: COMMENT_MARKER
+      marker: settings.commentMarker
     })
     try {
-      await upsertComment(octokit, owner, repo, pull.number, body)
+      await upsertComment(octokit, owner, repo, pull.number, body, settings.commentMarker)
       core.info(`Commented on PR #${pull.number}`)
     } catch (err) {
       core.warning(`Failed to comment on PR #${pull.number}: ${String(err)}`)

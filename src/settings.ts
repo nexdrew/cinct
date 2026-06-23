@@ -8,6 +8,7 @@ export interface Settings {
   filesGlobs: string[]
   checkName: string
   commentTitle: string
+  commentMarker: string
   format: ReportFormat
   timeFactor: number
   jsonFile: string | undefined
@@ -51,6 +52,21 @@ function splitPatterns (value: string): string[] {
     .filter((s) => s !== '')
 }
 
+function slug (s: string): string {
+  return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
+/**
+ * Hidden HTML marker used to find/update this run's PR comment across runs.
+ * Derived from the check name so distinct checks get distinct sticky comments
+ * (the default check name "Test Results" yields the historical marker). An
+ * explicit `comment_marker` input overrides this.
+ */
+export function deriveMarker (checkName: string): string {
+  const s = slug(checkName)
+  return `<!-- ci-hawk:${s !== '' ? s : 'test-results'} -->`
+}
+
 export function getSettings (): Settings {
   const timeUnit = input('time_unit', 'seconds').toLowerCase()
   const timeFactor = timeUnit === 'milliseconds' ? 0.001 : 1.0
@@ -74,6 +90,7 @@ export function getSettings (): Settings {
     filesGlobs: splitPatterns(input('files')),
     checkName,
     commentTitle: input('comment_title', checkName),
+    commentMarker: input('comment_marker', deriveMarker(checkName)),
     format,
     timeFactor,
     jsonFile: jsonFile !== '' ? jsonFile : undefined,

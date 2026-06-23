@@ -1,13 +1,11 @@
 import type { Octokit } from './github.js'
 
-/** Hidden marker used to find a comment ci-hawk previously posted on a PR. */
-export const COMMENT_MARKER = '<!-- ci-hawk:test-results -->'
-
 async function findCommentId (
   octokit: Octokit,
   owner: string,
   repo: string,
-  issueNumber: number
+  issueNumber: number,
+  marker: string
 ): Promise<number | undefined> {
   const iterator = octokit.paginate.iterator(
     octokit.rest.issues.listComments,
@@ -19,7 +17,7 @@ async function findCommentId (
   for await (const { data } of iterator) {
     for (const comment of data) {
       const body = comment.body
-      if (typeof body === 'string' && body.includes(COMMENT_MARKER)) {
+      if (typeof body === 'string' && body.includes(marker)) {
         latest = comment.id
       }
     }
@@ -29,16 +27,17 @@ async function findCommentId (
 
 /**
  * Create a ci-hawk comment on the issue/PR, or edit the existing one (identified
- * by COMMENT_MARKER) so re-runs update in place rather than piling up.
+ * by `marker`) so re-runs update in place rather than piling up.
  */
 export async function upsertComment (
   octokit: Octokit,
   owner: string,
   repo: string,
   issueNumber: number,
-  body: string
+  body: string,
+  marker: string
 ): Promise<void> {
-  const existingId = await findCommentId(octokit, owner, repo, issueNumber)
+  const existingId = await findCommentId(octokit, owner, repo, issueNumber, marker)
   if (existingId !== undefined) {
     await octokit.rest.issues.updateComment({
       owner,
